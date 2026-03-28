@@ -5,9 +5,23 @@ log() {
   printf '[%s] %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$*"
 }
 
-log "Installing Docker, Compose plugin, and deploy helpers"
+install_compose_plugin() {
+  local plugin_dir="/usr/local/libexec/docker/cli-plugins"
+  local plugin_path="${plugin_dir}/docker-compose"
+
+  log "Installing Docker Compose plugin"
+  install -d -m 0755 "${plugin_dir}"
+  curl -fsSL \
+    "https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64" \
+    -o "${plugin_path}"
+  chmod 0755 "${plugin_path}"
+  ln -sfn "${plugin_path}" /usr/local/bin/docker-compose
+}
+
+log "Installing Docker and deploy helpers"
 dnf update -y
-dnf install -y docker docker-compose-plugin jq tar gzip unzip awscli
+dnf install -y docker jq tar gzip unzip awscli
+install_compose_plugin
 
 log "Ensuring Docker and SSM agent are running"
 systemctl enable --now docker
@@ -26,4 +40,5 @@ fi
 
 docker --version
 docker compose version
+docker-compose --version
 log "Bootstrap complete"

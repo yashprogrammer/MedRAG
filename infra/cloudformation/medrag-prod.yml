@@ -301,8 +301,22 @@ Resources:
         Fn::Base64: !Sub |
           #!/bin/bash
           set -euo pipefail
+
+          install_compose_plugin() {
+            local plugin_dir="/usr/local/libexec/docker/cli-plugins"
+            local plugin_path="${plugin_dir}/docker-compose"
+
+            install -d -m 0755 "${plugin_dir}"
+            curl -fsSL \
+              "https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64" \
+              -o "${plugin_path}"
+            chmod 0755 "${plugin_path}"
+            ln -sfn "${plugin_path}" /usr/local/bin/docker-compose
+          }
+
           dnf update -y
-          dnf install -y docker docker-compose-plugin jq tar gzip unzip awscli
+          dnf install -y docker jq tar gzip unzip awscli
+          install_compose_plugin
           systemctl enable --now docker
           systemctl enable --now amazon-ssm-agent || true
           install -d -m 0755 /opt/medrag/app/releases
