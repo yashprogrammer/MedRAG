@@ -1,0 +1,145 @@
+{
+  "summary": {
+    "project": "medrag",
+    "collection_name": "medrag_collection_bge_small",
+    "started_at": "2026-03-27T04:39:40.674426Z",
+    "completed_at": "2026-03-27T04:40:43.921970Z",
+    "duration_seconds": 63.25,
+    "dataset_size": 3,
+    "passed_cases": 1,
+    "failed_cases": 2,
+    "success_rate": 0.3333,
+    "success": false
+  },
+  "cases": [
+    {
+      "id": "med_001",
+      "query": "What is a common first-line medication approach for type 2 diabetes?",
+      "expected_answer": "Clinical guidelines commonly describe metformin as a standard first-line therapy for type 2 diabetes, depending on patient-specific factors.",
+      "actual_answer": "A common first-line medication approach for type 2 diabetes typically includes lifestyle modification, glycemic monitoring, and the use of metformin when there are no contraindications. Individualized escalation to other medications such as GLP-1 receptor agonists, SGLT2 inhibitors, or insulin may occur based on factors like comorbidities, kidney function, cardiovascular risk, and glycemic control.",
+      "sources": [
+        "Bootstrap: bootstrap_seed",
+        "WHO: WHO_BP.pdf"
+      ],
+      "retrieval_context": [
+        "Type 2 diabetes management usually begins with lifestyle modification, glycemic monitoring, and metformin when there are no contraindications. Guidelines commonly describe individualized escalation to GLP-1 receptor agonists, SGLT2 inhibitors, or insulin based on comorbidities, kidney function, cardiovascular risk, and glycemic control.",
+        "Type 1 diabetes requires insulin replacement therapy rather than oral first-line agents. Guideline-based care typically includes basal-bolus or pump-based insulin delivery, glucose monitoring, hypoglycemia education, and individualized nutrition planning.",
+        "# Implementation Tools ## 6.1 Guideline Recommendations Graphic summaries of the guideline recommendations are presented below in an algorithmic approach (Figs 3 and 4). This maps the recommendations to a patient-care pathway. ### Fig. 3: An Approach for Starting Treatment with a Single-Pill Combination - **Treat adults with BP ≥140 mmHg or ≥90 mmHg (SBP ≥130 mmHg for those with CVD, DM, CKD).** - **Start two-drug combination therapy, preferably in a single-pill combination:** - ACE/ARB - Dihydr",
+        "# GUIDELINE FOR THE PHARMACOLOGICAL TREATMENT OF HYPERTENSION IN ADULTS ## Table of Contents - **Figures** - Fig. 1: Analytic framework for antihypertensive medication treatment - Fig. 2: Framework for analysis - Fig. 3: An approach for starting treatment with a single-pill combination - Fig. 4: An approach for starting treatment not using a single-pill combination (i.e. with monotherapy or free combination therapy) - Fig. 5: Algorithm 1 - Fig. 6: Algorithm 2 - Fig. A3.1: Rating of outcomes ## E"
+      ],
+      "metrics": [
+        {
+          "name": "Answer Relevance",
+          "score": 1.0,
+          "threshold": 0.7,
+          "success": true,
+          "reason": "The score is 1.00 because the response perfectly addressed the question about the common first-line medication approach for type 2 diabetes without any irrelevant information. Great job!",
+          "error": null
+        },
+        {
+          "name": "Context Relevance",
+          "score": 0.07142857142857142,
+          "threshold": 0.7,
+          "success": false,
+          "reason": "The score is 0.07 because the retrieval context primarily discusses advanced treatment options, Type 1 diabetes, and hypertension, which are irrelevant to the input about 'first-line medication approach for type 2 diabetes'. Only one statement mentions 'Type 2 diabetes management usually begins with lifestyle modification, glycemic monitoring, and metformin', which aligns with the input.",
+          "error": null
+        },
+        {
+          "name": "Groundedness",
+          "score": 1.0,
+          "threshold": 0.7,
+          "success": true,
+          "reason": "The score is 1.00 because there are no contradictions present, indicating a perfect alignment between the actual output and the retrieval context. Great job maintaining accuracy and consistency!",
+          "error": null
+        }
+      ],
+      "success": false
+    },
+    {
+      "id": "med_002",
+      "query": "What kinds of information do hypertension guidelines usually provide?",
+      "expected_answer": "Hypertension guidelines generally cover diagnosis thresholds, blood pressure targets, medication classes, and follow-up recommendations.",
+      "actual_answer": "Hypertension guidelines typically provide information on blood pressure thresholds, target ranges, home blood pressure monitoring, lifestyle changes, and medication classes such as ACE inhibitors, ARBs, calcium-channel blockers, and thiazide-type diuretics. They also outline follow-up cadence based on the severity of hypertension, symptoms, and treatment response. Additionally, guidelines may include recommendations for pharmacological treatment initiation, monitoring, and the involvement of nonphysician healthcare workers in hypertension management.",
+      "sources": [
+        "Bootstrap: bootstrap_seed",
+        "WHO: WHO_BP.pdf"
+      ],
+      "retrieval_context": [
+        "Hypertension guidelines generally cover blood pressure thresholds, target ranges, home blood pressure monitoring, lifestyle changes, and medication classes such as ACE inhibitors, ARBs, calcium-channel blockers, and thiazide-type diuretics. Follow-up cadence depends on severity, symptoms, and treatment response.",
+        "# Guideline for the Pharmacological Treatment of Hypertension in Adults ## Introduction This guideline replaces the guidance in the modules Evidence-based protocols and Risk-based CVD management of the HEARTS technical package, as well as the guidance in the WHO PEN package regarding the threshold for initiation of treatment and the preferred pharmacological treatment for hypertension. ### Scope - The guideline addresses pharmacotherapy in individuals with a “confirmed” diagnosis of hypertension",
+        "# Executive Summary More people die each year from cardiovascular diseases than from any other cause. Over three quarters of heart disease and stroke-related deaths occur in low-income and middle-income countries. Hypertension – or elevated blood pressure – is a serious medical condition that significantly increases the risk of heart, brain, kidney, and other diseases. Hypertension can be defined using specific systolic and diastolic blood pressure levels or reported use of antihypertensive medi",
+        "# Guideline for the Pharmacological Treatment of Hypertension in Adults ## World Health Organization ### Table of Contents 1. Introduction 2. Diagnosis of Hypertension 3. Treatment Recommendations - 3.1 First-Line Medications - 3.2 Second-Line Medications - 3.3 Special Populations 4. Monitoring and Follow-Up 5. Warnings and Contraindications 6. Evidence Tables ---- ### 1. Introduction Hypertension is a major risk factor for cardiovascular diseases and requires effective management to reduce morb"
+      ],
+      "metrics": [
+        {
+          "name": "Answer Relevance",
+          "score": 1.0,
+          "threshold": 0.7,
+          "success": true,
+          "reason": "The score is 1.00 because the response perfectly aligns with the input question, providing relevant and comprehensive information about the types of information typically found in hypertension guidelines. Great job on delivering a focused and accurate answer!",
+          "error": null
+        },
+        {
+          "name": "Context Relevance",
+          "score": 0.7777777777777778,
+          "threshold": 0.7,
+          "success": true,
+          "reason": "The score is 0.78 because while the retrieval context includes relevant information about hypertension guidelines, such as 'blood pressure thresholds, target ranges, home blood pressure monitoring, lifestyle changes, and medication classes,' it also contains several irrelevant statements like 'More people die each year from cardiovascular diseases than from any other cause,' which do not directly address the input question.",
+          "error": null
+        },
+        {
+          "name": "Groundedness",
+          "score": 1.0,
+          "threshold": 0.7,
+          "success": true,
+          "reason": "The score is 1.00 because there are no contradictions, indicating a perfect alignment between the actual output and the retrieval context. Great job maintaining accuracy and consistency!",
+          "error": null
+        }
+      ],
+      "success": true
+    },
+    {
+      "id": "med_003",
+      "query": "Why should retrieved medical guidance include a disclaimer?",
+      "expected_answer": "Medical RAG systems should clarify that outputs are educational and not a substitute for clinician judgment or personalized care.",
+      "actual_answer": "Retrieved medical guidance should include a disclaimer to clarify that the information is for educational purposes only and is not a substitute for clinician judgment, diagnosis, or personalized treatment. This disclaimer helps users understand the limitations of the retrieved material and encourages them to consult with qualified healthcare professionals for specific medical advice.",
+      "sources": [
+        "Bootstrap: bootstrap_seed",
+        "WHO: WHO_BP.pdf"
+      ],
+      "retrieval_context": [
+        "Medical guidance in retrieval-augmented systems should include a disclaimer that the information is for educational purposes only and is not a substitute for clinician judgment, diagnosis, or personalized treatment. The disclaimer helps users understand the limits of the retrieved material and encourages consultation with qualified healthcare professionals.",
+        "For commercial use and queries on rights and licensing, see [http://www.who.int/about/licensing](http://www.who.int/about/licensing). **Third-Party Materials** If you wish to reuse material from this work that is attributed to a third party, it is your responsibility to determine whether permission is needed for that reuse and to obtain permission from the copyright holder. **Errors and Omissions** All reasonable precautions have been taken by WHO to verify the information contained in this publ",
+        "# Annex 2: Managing Declarations of Interest and Conflicts of Interest ## Compliance and Review Process The steering group adhered to the current Compliance, Risk Management, and Ethics (CRE) policy. All members of the Guideline Development Group (GDG) were required to complete the standard WHO Declaration of Interest (DOI) forms, which were subsequently reviewed. ### Review of Potential Conflicts - The WHO Secretariat conducted a thorough review of the curriculum vitae of each potential partici",
+        "# Clinical Guidelines for Hypertension Management ## 1. Target Systolic Blood Pressure Goals ### 1.1 Recommendations for Patients with Known Cardiovascular Disease (CVD) - **Recommendation**: WHO recommends a target systolic blood pressure treatment goal of &#x3C;130 mmHg in patients with hypertension and known cardiovascular disease (CVD). - **Strength of Recommendation**: Strong recommendation - **Certainty of Evidence**: Moderate-certainty evidence ### 1.2 Recommendations for High-Risk Patien"
+      ],
+      "metrics": [
+        {
+          "name": "Answer Relevance",
+          "score": 1.0,
+          "threshold": 0.7,
+          "success": true,
+          "reason": "The score is 1.00 because the response perfectly addressed the question about the necessity of disclaimers in medical guidance without any irrelevant information. Great job on staying focused and relevant!",
+          "error": null
+        },
+        {
+          "name": "Context Relevance",
+          "score": 0.18181818181818182,
+          "threshold": 0.7,
+          "success": false,
+          "reason": "The score is 0.18 because the majority of the retrieval context statements focus on topics unrelated to disclaimers in medical guidance, such as commercial use, third-party material reuse, and compliance policies. Only two statements directly address the need for disclaimers, emphasizing their role in clarifying the educational purpose of the information and encouraging professional consultation.",
+          "error": null
+        },
+        {
+          "name": "Groundedness",
+          "score": 1.0,
+          "threshold": 0.7,
+          "success": true,
+          "reason": "The score is 1.00 because there are no contradictions, indicating a perfect alignment between the actual output and the retrieval context. Great job maintaining accuracy and consistency!",
+          "error": null
+        }
+      ],
+      "success": false
+    }
+  ]
+}
