@@ -101,7 +101,7 @@ For the full CLI-first operator walkthrough, use [docs/aws-ec2-cicd-runbook.md](
 - one ECR repository for the shared MedRAG image
 - one versioned S3 bucket for deployment bundles
 - one Secrets Manager secret for `OPENAI_API_KEY` and `LLAMA_CLOUD_API_KEY`
-- one GitHub Actions OIDC role for deploy/destroy workflows
+- one stack-managed GitHub Actions OIDC role for deploy workflows
 
 ### Required GitHub repository variables
 
@@ -116,16 +116,23 @@ For the infrastructure workflow:
 - `PROD_SECRET_NAME`
 - `EXISTING_GITHUB_OIDC_PROVIDER_ARN` (optional, leave empty to let the stack create the provider)
 
-For the deploy and destroy workflows:
+For the deploy workflow:
 
 - `AWS_REGION`
 - `AWS_ROLE_ARN`
+- `PROD_STACK_NAME`
+
+For the infrastructure and destroy workflows:
+
+- `AWS_REGION`
+- `AWS_BOOTSTRAP_ROLE_ARN`
 - `PROD_STACK_NAME`
 
 The split is intentional:
 
 - `AWS_BOOTSTRAP_ROLE_ARN` is an existing admin/bootstrap role used only to create or update the CloudFormation stack
 - `AWS_ROLE_ARN` should be set to the stack output `GitHubActionsRoleArn` after the first infrastructure deployment
+- `AWS_BOOTSTRAP_ROLE_ARN` must stay external to the `medrag-prod` stack; do not set it equal to `AWS_ROLE_ARN`, because the destroy workflow deletes the stack-managed role
 
 ### First-time setup
 
@@ -167,6 +174,8 @@ To completely wipe the production environment:
 
 1. run the `Destroy Production` workflow manually
 2. type `DESTROY_MEDRAG_PROD` as confirmation
+
+The destroy workflow must assume `AWS_BOOTSTRAP_ROLE_ARN`, not the stack-managed `AWS_ROLE_ARN`.
 
 This uses [scripts/destroy-prod.sh](/Users/yashpatil/Developer/AI/Evolvue/MedRAG/scripts/destroy-prod.sh) to:
 

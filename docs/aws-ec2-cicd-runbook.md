@@ -45,6 +45,12 @@ So this setup uses:
 - AWS Secrets Manager for runtime secrets
 - GitHub repository secrets for the CI eval job
 
+Important safety rule:
+
+- `AWS_BOOTSTRAP_ROLE_ARN` must be an external bootstrap/admin role that is not created by the `medrag-prod` CloudFormation stack
+- `AWS_ROLE_ARN` is the stack-managed runtime deploy role output by CloudFormation
+- never set `AWS_BOOTSTRAP_ROLE_ARN` equal to `AWS_ROLE_ARN`, because the destroy workflow deletes the stack-managed role
+
 ## 2. Set your shell variables
 
 Run this on your machine and replace the placeholders:
@@ -149,7 +155,7 @@ export SECRET_ARN="$(printf '%s' "${STACK_OUTPUTS}" | jq -r '.[] | select(.Outpu
 printf '%s\n' "${STACK_OUTPUTS}" | jq -r '.[] | "\(.OutputKey)=\(.OutputValue)"'
 ```
 
-At this point, the stack has created the permanent GitHub Actions deployment role. That means you do not need to create a temporary bootstrap role for the main path.
+At this point, the stack has created the stack-managed runtime deploy role for app deployments. Keep using your existing external bootstrap/admin role for infrastructure and destroy operations.
 
 ## 5. Configure GitHub Actions with GitHub CLI
 
@@ -165,6 +171,7 @@ gh auth status
 ```bash
 gh variable set AWS_REGION --repo "${GH_REPO}" --body "${AWS_REGION}"
 gh variable set AWS_ROLE_ARN --repo "${GH_REPO}" --body "${AWS_ROLE_ARN}"
+gh variable set AWS_BOOTSTRAP_ROLE_ARN --repo "${GH_REPO}" --body "arn:aws:iam::<account-id>:role/<external-bootstrap-role>"
 gh variable set PROD_STACK_NAME --repo "${GH_REPO}" --body "${STACK_NAME}"
 gh variable set PROD_VPC_ID --repo "${GH_REPO}" --body "${VPC_ID}"
 gh variable set PROD_SUBNET_ID --repo "${GH_REPO}" --body "${SUBNET_ID}"
@@ -172,15 +179,11 @@ gh variable set PROD_INSTANCE_TYPE --repo "${GH_REPO}" --body "${INSTANCE_TYPE}"
 gh variable set PROD_SECRET_NAME --repo "${GH_REPO}" --body "${SECRET_NAME}"
 ```
 
-Optional:
+Set `AWS_BOOTSTRAP_ROLE_ARN` to a stable role outside the `medrag-prod` stack. Good options are:
 
-- if you want to use the `Infrastructure` workflow later, also set:
-
-```bash
-gh variable set AWS_BOOTSTRAP_ROLE_ARN --repo "${GH_REPO}" --body "${AWS_ROLE_ARN}"
-```
-
-This works because the stack-created GitHub role already has the permissions needed by the infrastructure workflow.
+- a manually managed GitHub OIDC bootstrap role in the same AWS account
+- a long-lived admin/bootstrap role managed in a separate infrastructure stack
+- skip the GitHub `Destroy Production` workflow entirely and use your local AWS CLI admin credentials with `scripts/destroy-prod.sh`
 
 ### 5.2 Set GitHub repository secrets for CI evals
 
@@ -369,6 +372,8 @@ gh run watch "${INFRA_RUN_ID}" --repo "${GH_REPO}"
 ## 12. Destroy everything completely
 
 ### 12.1 Destroy through the GitHub workflow from the CLI
+
+Before running this, make sure the repository variable `AWS_BOOTSTRAP_ROLE_ARN` points to an external bootstrap/admin role and does not equal `AWS_ROLE_ARN`.
 
 Trigger the destroy workflow:
 

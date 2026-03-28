@@ -81,5 +81,6 @@ jobs:
             echo
             echo "- Stack: \`${PROD_STACK_NAME}\`"
             echo "- GitHub runtime role: \`${github_role_arn}\`"
-            echo "- Next step: update the repository variable \`AWS_ROLE_ARN\` to this value before using the deploy or destroy workflows."
+            echo "- Next step: update the repository variable \`AWS_ROLE_ARN\` to this value before using the deploy workflow."
+            echo "- Keep \`AWS_BOOTSTRAP_ROLE_ARN\` pointed at an external bootstrap/admin role for the infrastructure and destroy workflows."
           } >> "${GITHUB_STEP_SUMMARY}"

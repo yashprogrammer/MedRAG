@@ -70,6 +70,18 @@ ECR_REPOSITORY_NAME="$(get_output EcrRepositoryName)"
 SECRET_ARN="$(get_output SecretArn)"
 ELASTIC_IP="$(get_output ElasticIp)"
 SECURITY_GROUP_ID="$(get_output SecurityGroupId)"
+STACK_GITHUB_ROLE_ARN="$(get_output GitHubActionsRoleArn)"
+
+CALLER_ARN="$(aws sts get-caller-identity --region "${AWS_REGION}" --query Arn --output text)"
+STACK_GITHUB_ROLE_NAME="${STACK_GITHUB_ROLE_ARN##*/}"
+
+if [[ -n "${STACK_GITHUB_ROLE_ARN}" && "${STACK_GITHUB_ROLE_ARN}" != "null" ]]; then
+  if [[ "${CALLER_ARN}" == "${STACK_GITHUB_ROLE_ARN}" || "${CALLER_ARN}" == arn:aws:sts::*:assumed-role/${STACK_GITHUB_ROLE_NAME}/* ]]; then
+    printf 'Refusing to destroy stack %s while authenticated as the stack-managed GitHub role.\n' "${STACK_NAME}" >&2
+    printf 'Use an external bootstrap/admin role for destroy operations and keep AWS_BOOTSTRAP_ROLE_ARN separate from AWS_ROLE_ARN.\n' >&2
+    exit 1
+  fi
+fi
 
 send_teardown_command() {
   local commands_json
