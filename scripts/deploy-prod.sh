@@ -9,6 +9,7 @@ RUNTIME_DIR="${DEPLOY_ROOT}/runtime"
 RUNTIME_ENV_FILE="${RUNTIME_DIR}/app.env"
 PREVIOUS_ENV_FILE="${RUNTIME_DIR}/app.env.previous"
 TMP_ROOT="${DEPLOY_ROOT}/tmp"
+SECRET_FILE_TO_CLEANUP=""
 
 AWS_REGION="${AWS_REGION:?AWS_REGION is required}"
 RELEASE_ID="${RELEASE_ID:?RELEASE_ID is required}"
@@ -19,6 +20,12 @@ BUNDLE_LOCAL_PATH="${BUNDLE_LOCAL_PATH:-}"
 
 log() {
   printf '[%s] %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$*"
+}
+
+cleanup() {
+  if [[ -n "${SECRET_FILE_TO_CLEANUP}" && -f "${SECRET_FILE_TO_CLEANUP}" ]]; then
+    rm -f "${SECRET_FILE_TO_CLEANUP}"
+  fi
 }
 
 require_command() {
@@ -113,7 +120,8 @@ main() {
 
   local secret_file
   secret_file="$(mktemp "${TMP_ROOT}/secret.XXXXXX.json")"
-  trap 'rm -f "${secret_file}"' EXIT
+  SECRET_FILE_TO_CLEANUP="${secret_file}"
+  trap cleanup EXIT
 
   log "Fetching runtime secrets from Secrets Manager"
   aws secretsmanager get-secret-value \
